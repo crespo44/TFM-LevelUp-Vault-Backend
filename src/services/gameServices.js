@@ -23,7 +23,7 @@ async function getGame() {
     }
 }
 
-async function getGameByUser(userId) {
+async function getGamesByUser(userId) {
     try {
         const game = await Game.find({ user: userId });
         console.log('Juegos del usuario:', game);
@@ -103,4 +103,4 @@ async function adminDeleteGame(id) {
     }
 }
 
-module.exports = { insertGame, getGame, getGameByUser, updateGame, deleteGame, getAllGames, adminDeleteGame };
+module.exports = { insertGame, getGame, getGamesByUser, updateGame, deleteGame, getAllGames, adminDeleteGame };

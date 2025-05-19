@@ -36,20 +36,16 @@ const createGameValidations = [
 
     body('genre')
         .isArray({ min: 1 })
-        .withMessage('Debe proporcionar al menos un género')
-        .custom((values) => values.every(v => allGenres.includes(v)))
-        .withMessage('Uno o más géneros no son válidos'),
+        .withMessage('Debe proporcionar al menos un género'),
 
     body('platform')
         .isArray({ min: 1 })
-        .withMessage('Debe proporcionar al menos una plataforma')
-        .custom((values) => values.every(v => allPlatforms.includes(v)))
-        .withMessage('Una o más plataformas no son válidas'),
+        .withMessage('Debe proporcionar al menos una plataforma'),
 
     body('status')
         .notEmpty()
         .withMessage('El estado es requerido')
-        .isIn(['No juagados', 'Jugando', 'Finalizado'])
+        .isIn(['No jugados', 'Jugando', 'Finalizado'])
         .withMessage('El estado debe ser No jugados, Jugando o Finalizado'),
 
     body('rating')
@@ -86,7 +82,7 @@ const updateGameValidations = [
     body('status')
         .notEmpty()
         .withMessage('El estado es requerido')
-        .isIn(['No juagados', 'Jugando', 'Finalizado'])
+        .isIn(['No jugados', 'Jugando', 'Finalizado'])
         .withMessage('El estado debe ser No jugados, Jugando o Finalizado'),
     
     body('rating')

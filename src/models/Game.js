@@ -9,17 +9,17 @@ const gameSchema = new mongoose.Schema({
     description: {
         type: String,
     },
-    genre: [{
-        type: String,
+    genre: {
+        type: [String],
         enum: [
         'Acción', 'Aventura', 'RPG', 'Shooter', 'Puzzle',
         'Platformas', 'Estrategia', 'Depportes', 'Carreras', 'Simulacion',
         'Lucha', 'Terror', 'Survival', 'MMO', 'Sandbox'
         ],
         required: true
-    }],
-    platform: [{ 
-        type: String,
+    },
+    platform: { 
+        type: [String],
         enum: [
         'PC', 'PlayStation', 'PS2', 'PS3', 'PS4', 'PS5',
         'Xbox', 'Xbox 360', 'Xbox One', 'Xbox Series X',
@@ -27,11 +27,11 @@ const gameSchema = new mongoose.Schema({
         'Android', 'iOS', 'Mac', 'Linux', 'Other'
         ],
         required: true 
-    }],
+    },
     status: {
         type: String,
         required: true,
-        enum:['No juagados', 'Jugando', 'Finalizado'],
+        enum:['No jugados', 'Jugando', 'Finalizado'],
         default: 'No juagados'
     },
     rating: {
@@ -44,6 +44,12 @@ const gameSchema = new mongoose.Schema({
     },
     rawgImage: { 
         type: String 
+    },
+
+    user: { 
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'User', 
+        required: true 
     },
 
     lastUpdate: {
