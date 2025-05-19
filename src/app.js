@@ -25,7 +25,11 @@ app.use(cors({
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   })); 
 app.use(helmet());
-app.use(mongoSanitize());
+app.use((req,res,next) =>{
+  if (req.body) req.body = mongoSanitize.sanitize(req.body);
+  if (req.params) req.params = mongoSanitize.sanitize(req.params);
+  next();
+});
 
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 

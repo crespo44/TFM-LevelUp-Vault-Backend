@@ -80,12 +80,11 @@ const updateGameValidations = [
    
     body('description')
         .optional()
-        .withMessage('La descripción es requerida')
         .isString()
         .withMessage('La descripción debe ser texto'),
 
     body('status')
-        .optional()
+        .notEmpty()
         .withMessage('El estado es requerido')
         .isIn(['No juagados', 'Jugando', 'Finalizado'])
         .withMessage('El estado debe ser No jugados, Jugando o Finalizado'),

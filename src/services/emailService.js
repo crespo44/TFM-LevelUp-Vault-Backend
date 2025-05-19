@@ -3,65 +3,38 @@ const { createTransporter, config } = require('../config/configEmail');
 const createEmailHtml = (name, username, email, rol) => {
   return `
     <!DOCTYPE html>
-    <html>
+    <html lang="es">
     <head>
       <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Mensaje de Contacto</title>
-      <style>
-        body {
-          font-family: Arial, sans-serif;
-          line-height: 1.6;
-          color: #333;
-          max-width: 600px;
-          margin: 0 auto;
-          padding: 20px;
-        }
-        .header {
-          background-color: #5698e8;
-          color: white;
-          padding: 18px;
-          text-align: center;
-          border-radius: 5px 5px 0 0;
-        }
-        .content {
-          padding: 20px;
-          background-color: #ebf2fb;
-          border: 1px solid #ddd;
-          border-radius: 0 0 5px 5px;
-        }
-        .data {
-          background-color: white;
-          padding: 15px;
-          margin: 20px 0;
-          border-radius: 11px;
-        }
-        .footer {
-          text-align: center;
-          margin-top: 20px;
-          font-size: 12px;
-          color: #777777;
-        }
-      </style>
+      <title>Bienvenido a Level Up Vault</title>
     </head>
-    <body>
-      <div class="header">
-        <h1>¡Bienvenido a la Agenda de Eventos!</h1>
-      </div>
-      <div class="content">
-        <p>Estimado/a ${name},</p>
-        <p>¡Te damos la bienvenida a la Agenda de Eventos. Nos complace mucho que te unas a nosotros.</p>        
-        <h3>Tu datos de inscripcion:</h3>
-        <div class="data">
-          <strong>Nombre:</strong> <p>${name}</p>
-          <strong>Nombre de usuario:</strong> <p>${username}</p>
-          <strong>Email:</strong> <p><a href="mailto:${email}">${email}</a></p>
-          <strong>Rol:</strong> <p>${rol}</p>
+    <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; color: #e0e0e0;">
+      <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
+
+        <div style="background-color: #7c4dff; padding: 20px; text-align: center; border-radius: 8px 8px 0 0;">
+          <h1 style="margin: 0; font-size: 24px; color: #ffffff;">¡Bienvenido a Level Up Vault!</h1>
         </div>
-      </div>
-      <div class="footer">
-        <p>Este es un correo automático, por favor no respondas a este mensaje.</p>
-        <p>&copy; ${new Date().getFullYear()} Cfespo. Todos los derechos reservados.</p>
+
+        <div style="background-color: #2a2a3c; padding: 20px; border-radius: 0 0 8px 8px;">
+          <p style="font-size: 16px; margin-top: 0;">Hola <strong>${name}</strong>,</p>
+          <p>Gracias por registrarte en <strong>Level Up Vault</strong>, tu espacio para organizar tus videojuegos de forma personalizada y completa.</p>
+
+          <h3 style="color: #9e7eff;">Datos de tu cuenta:</h3>
+          <div style="background-color: #1c1c28; padding: 15px; border-radius: 6px; margin-bottom: 15px;">
+            <p><strong>Nombre:</strong> ${name}</p>
+            <p><strong>Usuario:</strong> ${username}</p>
+            <p><strong>Email:</strong> <a href="mailto:${email}" style="color: #9e7eff;">${email}</a></p>
+            <p><strong>Rol:</strong> ${rol}</p>
+          </div>
+
+          <p style="font-size: 14px;">¡Explora, organiza y disfruta tus juegos con estilo!</p>
+        </div>
+
+        <div style="text-align: center; font-size: 12px; color: #a0a0b0; margin-top: 20px;">
+          <p>Este es un correo automático. Por favor, no respondas a este mensaje.</p>
+          <p>&copy; ${new Date().getFullYear()} LevelUpVault. Todos los derechos reservados.</p>
+        </div>
+
       </div>
     </body>
     </html>
