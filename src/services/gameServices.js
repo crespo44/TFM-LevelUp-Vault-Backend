@@ -1,8 +1,9 @@
 const Game = require('../models/Game');
 
-async function insertGame(gameData, userId) {
+async function insertGame(gameData, userId, userName) {
     try {
-        gameData.user = userId;
+        gameData.userId = userId;
+        gameData.userName = userName;
         const game = new Game(gameData);
         const res = await game.save();
         console.log('Juego insertado:', res);
@@ -25,7 +26,7 @@ async function getGame() {
 
 async function getGamesByUser(userId) {
     try {
-        const game = await Game.find({ user: userId });
+        const game = await Game.find({ userId: userId });
         console.log('Juegos del usuario:', game);
         return game;
     } catch (err) {
@@ -33,18 +34,22 @@ async function getGamesByUser(userId) {
     }
 }
 
-
 async function updateGame(id, userId, gameData) {
     try {
+        console.log("[UPDATE] Recibido:", { id, userId, gameData });
+
+        const existingGame = await Game.findById(id);
+        console.log("[UPDATE] Documento original:", existingGame);
         gameData.lastUpdate = new Date();
         
         const game = await Game.findOneAndUpdate(
-            {_id: id, user: userId},
+            {_id: id, userId: userId},
             gameData,
             { 
                 new: true,
                 runValidators: true 
             }
+            
         );
 
         if (!game) {
@@ -62,7 +67,7 @@ async function updateGame(id, userId, gameData) {
 
 async function deleteGame(id, userId) {
     try {
-        const game = await Game.findOneAndDelete({ _id: id, user: userId });
+        const game = await Game.findOneAndDelete({ _id: id, userId: userId });
         
         if (!game) {
             throw new Error('Juego no encontrado o sin permisos');

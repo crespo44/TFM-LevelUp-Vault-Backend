@@ -7,7 +7,8 @@ const gameController = {
         async (req, response) => {
             try {
                 const userId = req.user.id;
-                const data = await getGamesByUser(userId);
+                const userName = req.user.username;
+                const data = await getGamesByUser(userId, userName);
                 response.status(200).json(data);
             } catch(e) {
                 console.log('Error al recoger juego de la BBDD', e);
@@ -21,7 +22,8 @@ const gameController = {
         async (req, response) => {
             try {
                 const userId = req.user.id;
-                const newGame = await insertGame(req.body, userId);
+                const userName = req.user.username;
+                const newGame = await insertGame(req.body, userId, userName);
                 response.status(201).json(newGame);
             } catch(e) {
                 console.log('Error al crear juego', e);

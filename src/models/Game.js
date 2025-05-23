@@ -46,10 +46,14 @@ const gameSchema = new mongoose.Schema({
         type: String 
     },
 
-    user: { 
+    userId: { 
         type: mongoose.Schema.Types.ObjectId, 
         ref: 'User', 
         required: true 
+    },
+    userName:{
+        type: String,
+        require: true
     },
 
     lastUpdate: {
