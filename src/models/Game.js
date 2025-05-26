@@ -31,8 +31,8 @@ const gameSchema = new mongoose.Schema({
     status: {
         type: String,
         required: true,
-        enum:['No jugados', 'Jugando', 'Finalizado'],
-        default: 'No juagados'
+        enum:['No jugado', 'Jugando', 'Finalizado'],
+        default: 'No jugado'
     },
     rating: {
         type: Number,

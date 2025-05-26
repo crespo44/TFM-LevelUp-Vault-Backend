@@ -81,7 +81,7 @@ const updateGameValidations = [
 
     body('status')
         .optional()
-        .isIn(['No jugados', 'Jugando', 'Finalizado'])
+        .isIn(['No jugado', 'Jugando', 'Finalizado'])
         .withMessage('El estado debe ser No jugados, Jugando o Finalizado'),
     
     body('rating')
