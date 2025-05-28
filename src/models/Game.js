@@ -13,8 +13,8 @@ const gameSchema = new mongoose.Schema({
         type: [String],
         enum: [
         'Acción', 'Aventura', 'RPG', 'Shooter', 'Puzzle',
-        'Platformas', 'Estrategia', 'Depportes', 'Carreras', 'Simulacion',
-        'Lucha', 'Terror', 'Survival', 'MMO', 'Sandbox'
+        'Platformas', 'Estrategia', 'Deportes', 'Carreras', 'Simulación',
+        'Lucha', 'Terror', 'Survival', 'MMO', 'Sandbox', 'Otros'
         ],
         required: true
     },
@@ -22,9 +22,9 @@ const gameSchema = new mongoose.Schema({
         type: [String],
         enum: [
         'PC', 'PlayStation', 'PS2', 'PS3', 'PS4', 'PS5',
-        'Xbox', 'Xbox 360', 'Xbox One', 'Xbox Series X',
+        'Xbox', 'Xbox 360', 'Xbox One', 'Xbox Ser. X',
         'Switch', 'Nintendo DS', 'Nintendo 3DS', 'Wii', 'Wii U',
-        'Android', 'iOS', 'Mac', 'Linux', 'Other'
+        'Android', 'iOS', 'Mac', 'Linux', 'Otros'
         ],
         required: true 
     },

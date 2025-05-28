@@ -11,15 +11,15 @@ const validateResult = (req, res, next) => {
 const allGenres = [
     'Acción', 'Aventura', 'RPG', 'Shooter', 'Puzzle',
     'Platformas', 'Estrategia', 'Deportes', 'Carreras', 'Simulación',
-    'Lucha', 'Terror', 'Survival', 'MMO', 'Sandbox'
+    'Lucha', 'Terror', 'Survival', 'MMO', 'Sandbox', 'Otros'
 ];
 
 
 const allPlatforms = [
     'PC', 'PlayStation', 'PS2', 'PS3', 'PS4', 'PS5',
-    'Xbox', 'Xbox 360', 'Xbox One', 'Xbox Series X',
+    'Xbox', 'Xbox 360', 'Xbox One', 'Xbox Ser. X',
     'Switch', 'Nintendo DS', 'Nintendo 3DS', 'Wii', 'Wii U',
-    'Android', 'iOS', 'Mac', 'Linux', 'Other'
+    'Android', 'iOS', 'Mac', 'Linux', 'Otros'
 ];
 
 const createGameValidations = [
@@ -36,17 +36,21 @@ const createGameValidations = [
 
     body('genre')
         .isArray({ min: 1 })
-        .withMessage('Debe proporcionar al menos un género'),
+        .withMessage('Debe proporcionar al menos un género')
+        .custom((arr) => arr.every(item => allGenres.includes(item)))
+        .withMessage('Género inválido'),
 
     body('platform')
         .isArray({ min: 1 })
-        .withMessage('Debe proporcionar al menos una plataforma'),
+        .withMessage('Debe proporcionar al menos una plataforma')
+        .custom((arr) => arr.every(item => allPlatforms.includes(item)))
+        .withMessage('Plataforma inválida'),
 
     body('status')
         .notEmpty()
         .withMessage('El estado es requerido')
-        .isIn(['No jugados', 'Jugando', 'Finalizado'])
-        .withMessage('El estado debe ser No jugados, Jugando o Finalizado'),
+        .isIn(['No jugado', 'Jugando', 'Finalizado'])
+        .withMessage('El estado debe ser No jugado, Jugando o Finalizado'),
 
     body('rating')
         .optional()
@@ -82,7 +86,7 @@ const updateGameValidations = [
     body('status')
         .optional()
         .isIn(['No jugado', 'Jugando', 'Finalizado'])
-        .withMessage('El estado debe ser No jugados, Jugando o Finalizado'),
+        .withMessage('El estado debe ser No jugado, Jugando o Finalizado'),
     
     body('rating')
         .optional()
