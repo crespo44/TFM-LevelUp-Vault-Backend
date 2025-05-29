@@ -104,7 +104,7 @@ const userController = {
             });
     
     
-            res.status(200).json({ message: 'Inicio de sesion exitoso', token, userId: user._id, rol: user.rol });
+            res.status(200).json({ message: 'Inicio de sesion exitoso', token, userId: user._id, username: user.username, rol: user.rol });
           } catch (error) {
             console.error('Error en el login:', error);
             res.status(401).json({ error: error.message });
