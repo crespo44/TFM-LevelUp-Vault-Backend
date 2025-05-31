@@ -64,6 +64,38 @@ const sendEmail = async (data) => {
   }
 };
 
+const sendContactEmail = async (data) => {
+  const { name, email, comment } = data;
+  const transporter = createTransporter();
+
+  const mailOptions = {
+    from: email,    
+    to: config.EMAIL_USER,     
+    subject: `Nuevo mensaje de contacto de ${name}`,
+    html: `
+      <h2>Nuevo mensaje desde el formulario de contacto</h2>
+      <p><strong>Nombre:</strong> ${name}</p>
+      <p><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p>
+      <p><strong>Mensaje:</strong></p>
+      <div style="border:1px solid #eee; background:#f9f9f9; padding:1em; border-radius:5px;">
+        ${comment.replace(/\n/g, "<br>")}
+      </div>
+    `,
+    text: `Nombre: ${name}\nEmail: ${email}\n\nMensaje:\n${comment}`,
+  };
+
+  try {
+    const info = await transporter.sendMail(mailOptions);
+    console.log('Mensaje de contacto enviado: ' + info.response);
+    return { success: true, message: 'Mensaje de contacto enviado exitosamente.' };
+  } catch (error) {
+    console.error('Error al enviar el mensaje de contacto:', error);
+    return { success: false, error: 'Error al enviar el mensaje de contacto.' };
+  }
+};
+
+
 module.exports = {
-  sendEmail
+  sendEmail,
+  sendContactEmail
 }; 

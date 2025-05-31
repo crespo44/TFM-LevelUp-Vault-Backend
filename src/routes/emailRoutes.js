@@ -6,6 +6,8 @@ const validateEmailData = require('../middlewares/validateEmailData');
 
 router.get('/', emailController.testRoute);
 
-router.post('/send-email', validateEmailData, emailController.sendEmail);
+router.post('/send-email', validateEmailData.validateEmailData, emailController.sendEmail);
+
+router.post('/contact',validateEmailData.validateContactData, emailController.contactFormEmail);
 
 module.exports = router; 
