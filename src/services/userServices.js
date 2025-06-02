@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const Game = require('../models/game'); 
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
@@ -103,6 +104,7 @@ async function updateUser(id, userData) {
 
 async function deleteUser(id) {
     try {
+        await Game.deleteMany({ userId: id });
         const user = await User.findByIdAndDelete(id);
         
         if (!user) {
