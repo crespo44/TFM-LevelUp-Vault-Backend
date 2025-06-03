@@ -1,5 +1,5 @@
 const User = require('../models/User');
-const Game = require('../models/game'); 
+const Game = require('../models/Game'); 
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();

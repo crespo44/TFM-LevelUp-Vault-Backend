@@ -7,8 +7,8 @@ const gameController = {
         async (req, response) => {
             try {
                 const userId = req.user.id;
-                const userName = req.user.username;
-                const data = await getGamesByUser(userId, userName);
+                const filters = req.query;
+                const data = await getGamesByUser(userId, filters);
                 response.status(200).json(data);
             } catch(e) {
                 console.log('Error al recoger juego de la BBDD', e);
@@ -67,7 +67,9 @@ const gameController = {
         ...getGameValidations,
         async (req, res) => {
             try {
-                const data = await getAllGames();
+                const filters = req.query;
+                console.log("Filtros recibidos (admin):", filters);
+                const data = await getAllGames(filters);
                 res.status(200).json(data);
             } catch (e) {
                 console.log('Error al recoger todos los juegos (admin)', e);

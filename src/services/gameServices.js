@@ -24,9 +24,23 @@ async function getGame() {
     }
 }
 
-async function getGamesByUser(userId) {
+async function getGamesByUser(userId, filters = {}) {
     try {
-        const game = await Game.find({ userId: userId });
+        const query = { userId };
+
+        if (filters.title) {
+            query.title = { $regex: filters.title, $options: 'i' };
+        }
+        if (filters.genre) {
+            query.genre = { $regex: filters.genre, $options: 'i' };
+        }
+        if (filters.platform) {
+            query.platform = { $regex: filters.platform, $options: 'i' };
+        }
+        if (filters.status) {
+            query.status = filters.status;
+        }
+        const game = await Game.find(query);
         console.log('Juegos del usuario:', game);
         return game;
     } catch (err) {
@@ -81,9 +95,26 @@ async function deleteGame(id, userId) {
     }
 }
 
-async function getAllGames() {
+async function getAllGames(filters={}) {
     try {
-        const games = await Game.find();
+        const query = {};
+
+        if (filters.title) {
+            query.title = { $regex: filters.title, $options: 'i' };
+        }
+        if (filters.genre) {
+            query.genre = { $regex: filters.genre, $options: 'i' };
+        }
+        if (filters.platform) {
+            query.platform = { $regex: filters.platform, $options: 'i' };
+        }
+        if (filters.status) {
+            query.status = filters.status;
+        }
+        if (filters.user) {
+            query.userName = { $regex: filters.user, $options: 'i' };
+        }
+        const games = await Game.find(query);
         console.log('Todos los juegos:', games);
         return games;
     } catch (err) {
