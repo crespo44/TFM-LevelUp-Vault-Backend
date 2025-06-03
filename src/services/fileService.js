@@ -11,25 +11,30 @@ async function iniUploadDirectory(dirPath) {
     }
 }
 
-async function uploadFile( userId, gameId ) {
-    const userGamePath = path.join(uploadDir, `user_${userId}`, `game_${gameId}`)
+async function uploadFile(file, gameId) {
+    const userGamePath = path.join(uploadDir, `game_${gameId}`)
     await iniUploadDirectory(userGamePath);
-    return await fs.readdir(userGamePath);;
+    const filePath = path.join(userGamePath, file.originalname);
+    await fs.writeFile(filePath, file.buffer);
+    return `game_${gameId}/${file.originalname}`;;
 }
 
-async function downloadFile(userId, gameId, filename) {
-    const filePath = path.join(uploadDir, `user_${userId}`, `game_${gameId}`, filename);
-    return await fs.readFile(filePath);
+function downloadFile(gameId, filename) {
+    return path.resolve(__dirname, '../../uploads', `game_${gameId}`, filename);
 }
 
-async function listFiles(userId, gameId) {
-    const userGamePath = path.join(uploadDir, `user_${userId}`, `game_${gameId}`);
-    await iniUploadDirectory(userGamePath);
-    return await fs.readdir(userGamePath);
+async function listFiles(gameId) {
+    const userGamePath = path.join(uploadDir, `game_${gameId}`);
+    try {
+        await fs.access(userGamePath);
+        return await fs.readdir(userGamePath);
+    } catch {
+        return [];
+    }
 }
 
-async function deleteFile(filename) {
-    const filePath = path.join(uploadDir, `user_${userId}`, `game_${gameId}`, filename);
+async function deleteFile(gameId, filename) {
+    const filePath = path.join(uploadDir, `game_${gameId}`, filename);
     await fs.unlink(filePath);
 }
 
