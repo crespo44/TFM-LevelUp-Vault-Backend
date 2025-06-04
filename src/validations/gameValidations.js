@@ -63,7 +63,7 @@ const createGameValidations = [
         .withMessage('Las notas deben ser texto'),
 
     body('rawgImage')
-        .optional()
+        .optional({ checkFalsy: true })
         .isURL()
         .withMessage('rawgImage debe ser una URL válida'),
         

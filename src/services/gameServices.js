@@ -4,6 +4,9 @@ async function insertGame(gameData, userId, userName) {
     try {
         gameData.userId = userId;
         gameData.userName = userName;
+        if (!gameData.rawgImage) {
+            gameData.rawgImage = "";
+        }
         const game = new Game(gameData);
         const res = await game.save();
         console.log('Juego insertado:', res);
