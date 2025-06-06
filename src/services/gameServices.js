@@ -51,16 +51,20 @@ async function getGamesByUser(userId, filters = {}) {
     }
 }
 
-async function updateGame(id, userId, gameData) {
+async function updateGame(id, userId, gameData, isAdmin = false) {
     try {
-        console.log("[UPDATE] Recibido:", { id, userId, gameData });
 
         const existingGame = await Game.findById(id);
         console.log("[UPDATE] Documento original:", existingGame);
         gameData.lastUpdate = new Date();
+
+        let filter = { _id: id };
+        if (!isAdmin) {
+            filter.userId = userId;
+        }
         
         const game = await Game.findOneAndUpdate(
-            {_id: id, userId: userId},
+            filter,
             gameData,
             { 
                 new: true,

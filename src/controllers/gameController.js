@@ -38,8 +38,9 @@ const gameController = {
             try {
                 const { id } = req.params;
                 const userId = req.user.id;
+                const isAdmin = req.user.role === 'admin';
                 const gameData = req.body;
-                const updatedGame = await updateGame(id, userId, gameData);
+                const updatedGame = await updateGame(id, userId, gameData, isAdmin);
                 response.status(200).json(updatedGame);
             } catch(e) {
                 console.log('Error al actualizar juego', e);
