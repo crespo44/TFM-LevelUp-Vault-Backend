@@ -1,29 +1,14 @@
 const fileService = require('../services/FileService');
-const path = require('path');
-const fs = require('fs');
 
 async function downloadGameImage(req, res) {
     try {
         const { gameId, filename } = req.params;
-        const filePath = fileService.downloadFile(gameId, filename);
 
-        // Confirmar que existe y es accesible
-        if (!fs.existsSync(filePath)) {
-            return res.status(404).json({ error: 'Archivo no existe físicamente' });
-        }
-
-        // Enviar como archivo real
-        res.sendFile(path.resolve(filePath), function(err) {
-            if (err) {
-                console.error('Error exacto de sendFile:', err.message);
-                if (!res.headersSent) {
-                    res.status(500).json({ error: 'Error al enviar imagen' });
-                }
-            }
-        });
+        const cloudinaryUrl = `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/game_${gameId}/${filename}`;
+        return res.redirect(cloudinaryUrl);
     } catch (error) {
-        console.error('Error global:', error.message);
-        res.status(500).json({ error: 'Fallo inesperado' });
+        console.error('Error al redirigir a imagen:', error);
+        res.status(500).json({ error: 'Error al redirigir imagen' });
     }
 }
 
@@ -36,8 +21,13 @@ async function uploadGameImage (req, res) {
             return res.status(400).json({ error: 'No se a puesto ningún archivo' });
         }
         
-        const filename = await fileService.uploadFile(req.file, gameId);
-        res.status(201).json({ message: 'El archivo se ha subido exitosamente', filename });
+        const { url, publicId } = await fileService.uploadFile(req.file, gameId);
+        res.status(201).json({
+            message: 'El archivo se ha subido exitosamente',
+            filename: req.file.originalname,
+            url,
+            publicId
+        });
     } catch (error) {
         console.error('Error al subir archivo:', error);
         res.status(500).json({ error: 'Error de subida de archivo' });
@@ -47,7 +37,7 @@ async function uploadGameImage (req, res) {
 async function listGameImages (req, res) {
     try {
         const gameId = req.params.gameId;
-        const files = await fileService.listFiles( gameId );
+        const files = await fileService.listFiles(gameId);
         res.status(200).json({ files });;
     } catch (error) {
         console.error('Error al listar archivos:', error);
@@ -55,11 +45,10 @@ async function listGameImages (req, res) {
     }
 }
 
-async function deleteGameImage (req, res) {
+async function deleteGameImage(req, res) {
     try {
-        const gameId = req.params.gameId;
-        const filename = req.params.filename;
-        await fileService.deleteFile(gameId, filename);
+        const publicId = req.query.publicId;
+        await fileService.deleteFile(publicId);
         res.status(200).json({ message: 'Archivo eliminado correctamente' });
     } catch (error) {
         console.error('Error al eliminar archivo:', error);

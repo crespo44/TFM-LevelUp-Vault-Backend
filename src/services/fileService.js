@@ -1,49 +1,66 @@
-const fs = require('fs').promises;
-const path = require('path');
+const cloudinary = require('../config/configCloudinary');
 
-const uploadDir = path.join(__dirname, '../../uploads');
+const uploadedImages = {};
 
-async function iniUploadDirectory(dirPath) {
+async function uploadFile(file, gameId) {
     try {
-        await fs.access(dirPath);
-    } catch {
-        await fs.mkdir(dirPath, { recursive: true });
+        const result = await cloudinary.uploader.upload(`data:${file.mimetype};base64,${file.buffer.toString('base64')}`, {
+            folder: `game_${gameId}`,
+            public_id: file.originalname
+        });
+
+        if (!uploadedImages[gameId]) {
+            uploadedImages[gameId] = [];
+        }
+        uploadedImages[gameId].push({url: result.secure_url, publicId: result.public_id});
+
+        return { url: result.secure_url, publicId: result.public_id };
+    } catch (error) {
+        console.error('❌ Error al subir imagen:', error);
+        throw error;
     }
 }
 
-async function uploadFile(file, gameId) {
-    const userGamePath = path.join(uploadDir, `game_${gameId}`)
-    await iniUploadDirectory(userGamePath);
-    const filePath = path.join(userGamePath, file.originalname);
-    await fs.writeFile(filePath, file.buffer);
-    return `game_${gameId}/${file.originalname}`;;
-}
-
 function downloadFile(gameId, filename) {
-    return path.resolve(__dirname, '../../uploads', `game_${gameId}`, filename);
+    return `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/game_${gameId}/${filename}`;
 }
 
 async function listFiles(gameId) {
-    const userGamePath = path.join(uploadDir, `game_${gameId}`);
     try {
-        await fs.access(userGamePath);
-        return await fs.readdir(userGamePath);
-    } catch {
+        const folder = `game_${gameId}`;
+        const result = await cloudinary.search
+            .expression(`folder:${folder}`)
+            .sort_by('public_id', 'desc')
+            .max_results(30)
+            .execute();
+
+        return result.resources.map(file => ({
+            url: file.secure_url,
+            publicId: file.public_id
+        }));
+    } catch (error) {
+        console.error('Error al listar archivos en Cloudinary:', error);
         return [];
     }
 }
 
-async function deleteFile(gameId, filename) {
-    const filePath = path.join(uploadDir, `game_${gameId}`, filename);
-    await fs.unlink(filePath);
+
+async function deleteFile(publicId) {
+    await cloudinary.uploader.destroy(publicId);
+    const gameId = extractGameId(publicId);
+    if (gameId && uploadedImages[gameId]) {
+        uploadedImages[gameId] = uploadedImages[gameId].filter(file => file.publicId !== publicId);
+    }
 }
 
-
-iniUploadDirectory(uploadDir);
+function extractGameId(publicId) {
+    const match = publicId.match(/^game_(.+?)\//);;
+    return match ? match[1] : null;
+}
 
 module.exports = {
     uploadFile,
     downloadFile,
     listFiles,
     deleteFile
-}; 
+};
