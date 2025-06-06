@@ -38,7 +38,7 @@ const gameController = {
             try {
                 const { id } = req.params;
                 const userId = req.user.id;
-                const isAdmin = req.user.rol === 'administrativo';
+                const isAdmin = req.user.rol === 'administrador';
                 const gameData = req.body;
                 const updatedGame = await updateGame(id, userId, gameData, isAdmin);
                 response.status(200).json(updatedGame);
