@@ -17,13 +17,14 @@ const app = express();
 
 
 app.use(express.json());
-app.use(express.static(path.join(__dirname, '../../frontend')));
+//app.use(express.static(path.join(__dirname, '../../frontend')));
 app.use(cookieParser());
-app.use(cors({
+app.use(cors());
+/*app.use(cors({
     origin: ["http://localhost:3000", "http://localhost:5173"],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  })); 
+  })); */
 app.use(helmet());
 app.use((req,res,next) =>{
   if (req.body) req.body = mongoSanitize.sanitize(req.body);
@@ -32,7 +33,7 @@ app.use((req,res,next) =>{
 });
 
 
-app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+//app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 const apiLimiter = rateLimit({ 
   windowMs: 15 * 60 * 1000, 

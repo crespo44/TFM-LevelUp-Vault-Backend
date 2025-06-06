@@ -3,7 +3,7 @@ const Game = require('../models/Game');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
-const SECRET_KEY = process.env.SECRET_KEY;
+const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
 
 async function insertUser(userData) {
     try {
@@ -131,7 +131,7 @@ const loginUser = async (username, password) => {
       throw new Error('Contraseña incorrecta');
     }
   
-    const token = jwt.sign({ id: user._id, username: user.username, rol: user.rol }, SECRET_KEY, { expiresIn: '1h' });
+    const token = jwt.sign({ id: user._id, username: user.username, rol: user.rol }, JWT_SECRET_KEY, { expiresIn: '1h' });
   
     return {token, user};
   }
