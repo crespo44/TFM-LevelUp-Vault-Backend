@@ -1,4 +1,4 @@
-const fileService = require('../services/FileService');
+const fileService = require('../services/fileService');
 
 async function downloadGameImage(req, res) {
     try {
